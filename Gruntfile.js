@@ -34,6 +34,12 @@
         },
       },
 
+      execute: {
+		fetch: {
+          src: ['lib/fetch.js']
+		}
+      },
+
       copy: {
         main: {
           files: [
@@ -119,10 +125,12 @@
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-execute');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-s3');
 
     // launch time bootstrap tasks
+    grunt.registerTask('fetch', [ 'execute:fetch' ]);
     grunt.registerTask('deploy', [ 'prep-dist-dir', 's3' ]);
     grunt.registerTask('fixhtmlminbug', 'htmlmin has a bug', function() {
       grunt.log.writeln('Fixing');
@@ -133,7 +141,6 @@
         replace(/(maximum-scale=1;)/g, ' $1 ');
       fs.writeFileSync(distPath, result, 'utf8');
     });
-
 
     grunt.registerTask('prep-dist-dir', [
       'coffee',
